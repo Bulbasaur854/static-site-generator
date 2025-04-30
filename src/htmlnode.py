@@ -12,10 +12,24 @@ class HTMLNode:
         result = ""        
 
         if self.props:
-            for atr in self.props:
-                result += f" {atr}=\"{self.props[atr]}\""
+            for prop in self.props:
+                result += f' {prop}="{self.props[prop]}"'
         
         return result
     
     def __repr__(self):
-        return f"tag: {self.tag}, value: {self.value}, children: {self.children}, props: {self.props}"
+        return f"HTMLNode({self.tag}, {self.value}, children: {self.children}, {self.props})"
+    
+class LeafNode(HTMLNode):
+    def __init__(self, tag, value, props=None):
+        super().__init__(tag, value, None, props)
+
+    def to_html(self):
+        if self.value is None:
+            raise ValueError("invalid HTML: no value")
+        if self.tag is None:
+            return self.value
+        return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
+
+    def __repr__(self):
+        return f"LeafNode({self.tag}, {self.value}, {self.props})"
