@@ -26,6 +26,7 @@ class TestTextNode(unittest.TestCase):
         node = TextNode("This is a text node", TextType.LINK)
         self.assertEqual(node.__repr__(), "TextNode(This is a text node, link, None)")   
 
+class TestTextNodeToHTMLNode(unittest.TestCase):
     def test_text_to_html(self):
         node = TextNode("This is a text node", TextType.TEXT)
         html_node = text_node_to_html_node(node)
