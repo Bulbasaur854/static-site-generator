@@ -83,5 +83,30 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             new_nodes,
         )
 
+class TestExtractMarkdown(unittest.TestCase):  
+    def test_extract_markdown_images(self):
+        matches = extract_markdown_images("This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)")
+        self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
+
+    def test_extract_markdown_images_empty(self):
+        matches = extract_markdown_images("This is a text without any images")
+        self.assertEqual([], matches)
+
+    def test_extract_markdown_images_link(self):
+        matches = extract_markdown_images("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)")
+        self.assertEqual([], matches)
+
+    def test_extract_markdown_links(self):
+        matches = extract_markdown_links("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)")
+        self.assertEqual([("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")], matches)
+
+    def test_extract_markdown_links_empty(self):
+        matches = extract_markdown_links("This is a text without any links")
+        self.assertEqual([], matches)  
+
+    def test_extract_markdown_links_image(self):
+        matches = extract_markdown_links("This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)")
+        self.assertEqual([], matches) 
+
 if __name__ == "__main__":
     unittest.main()
