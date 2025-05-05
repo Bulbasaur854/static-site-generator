@@ -86,3 +86,10 @@ def text_to_textnode(text):
     new_nodes = split_nodes_link(new_nodes)
     
     return new_nodes
+
+def markdown_to_blocks(markdown):
+    split_markdown = markdown.split("\n\n")
+    for node in split_markdown:
+        if node == "":
+            split_markdown.remove(node)
+    return list(map(lambda node: node.strip(), split_markdown))
