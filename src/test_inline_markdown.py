@@ -272,5 +272,44 @@ class TestTextToTextNodes(unittest.TestCase):
             text_nodes
         )
 
+    def test_text_to_text_nodes2(self):
+        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        text_nodes = text_to_textnode(text)
+        self.assertEqual(
+            [
+                TextNode("This is ", TextType.TEXT),
+                TextNode("text", TextType.BOLD),
+                TextNode(" with an ", TextType.TEXT),
+                TextNode("italic", TextType.ITALIC),
+                TextNode(" word and a ", TextType.TEXT),
+                TextNode("code block", TextType.CODE),
+                TextNode(" and an ", TextType.TEXT),
+                TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+                TextNode(" and a ", TextType.TEXT),
+                TextNode("link", TextType.LINK, "https://boot.dev"),
+            ],
+            text_nodes
+        )
+
+    def test_text_to_text_nodes_order(self):
+        text = "This is a `code snippet` with an _important_ **bold statement** and a [useful link](https://example.com) plus an ![image alt text](https://example.com/image.jpg) for good measure."
+        text_nodes = text_to_textnode(text)
+        self.assertEqual(
+            [
+                TextNode("This is a ", TextType.TEXT),
+                TextNode("code snippet", TextType.CODE),
+                TextNode(" with an ", TextType.TEXT),
+                TextNode("important", TextType.ITALIC),
+                TextNode(" ", TextType.TEXT),
+                TextNode("bold statement", TextType.BOLD),
+                TextNode(" and a ", TextType.TEXT),
+                TextNode("useful link", TextType.LINK, "https://example.com"),
+                TextNode(" plus an ", TextType.TEXT),
+                TextNode("image alt text", TextType.IMAGE, "https://example.com/image.jpg"),
+                TextNode(" for good measure.", TextType.TEXT),
+            ],
+            text_nodes
+        )
+
 if __name__ == "__main__":
     unittest.main()
