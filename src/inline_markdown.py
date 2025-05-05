@@ -79,24 +79,10 @@ def split_nodes_image_link(old_nodes, extract_markdown_function, text_type):
     return new_nodes
 
 def text_to_textnode(text):
-    print(f"Original text:\n{text}\n")
     new_nodes = split_nodes_delimiter([TextNode(text, TextType.TEXT)], "**", TextType.BOLD)
-    print(f"Bold split:")
-    for node in new_nodes:
-        print(f"{node}")
     new_nodes = split_nodes_delimiter(new_nodes, "_", TextType.ITALIC)
-    print(f"\nItalic split:")
-    for node in new_nodes:
-        print(f"{node}")
     new_nodes = split_nodes_delimiter(new_nodes, "`", TextType.CODE)
-    print(f"\nCode split:")
-    for node in new_nodes:
-        print(f"{node}")
     new_nodes = split_nodes_image(new_nodes)
-    print(f"\nImage split:")
-    for node in new_nodes:
-        print(f"{node}")
     new_nodes = split_nodes_link(new_nodes)
-    print(f"\nLink split:")
-    for node in new_nodes:
-        print(f"{node}")
+    
+    return new_nodes

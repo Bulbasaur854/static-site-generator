@@ -24,7 +24,9 @@ def main():
     # text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
     # text = "**Bold start** with _italic middle_ and `code end`."
     text = "This is a **bold statement** with an _important_ `code snippet` and a [useful link](https://example.com) plus an ![image alt text](https://example.com/image.jpg) for good measure."
-    text_to_textnode(text)
+    nodes = text_to_textnode(text)
+    for node in nodes:
+        print(node)
 
 if __name__=="__main__":
     main()

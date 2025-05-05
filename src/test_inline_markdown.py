@@ -251,5 +251,26 @@ class TestSplitNodesImageLink(unittest.TestCase):
             new_nodes,
         )
 
+class TestTextToTextNodes(unittest.TestCase):
+    def test_text_to_text_nodes(self):
+        text = "This is a **bold statement** with an _important_ `code snippet` and a [useful link](https://example.com) plus an ![image alt text](https://example.com/image.jpg) for good measure."
+        text_nodes = text_to_textnode(text)
+        self.assertEqual(
+            [
+                TextNode("This is a ", TextType.TEXT),
+                TextNode("bold statement", TextType.BOLD),
+                TextNode(" with an ", TextType.TEXT),
+                TextNode("important", TextType.ITALIC),
+                TextNode(" ", TextType.TEXT),
+                TextNode("code snippet", TextType.CODE),
+                TextNode(" and a ", TextType.TEXT),
+                TextNode("useful link", TextType.LINK, "https://example.com"),
+                TextNode(" plus an ", TextType.TEXT),
+                TextNode("image alt text", TextType.IMAGE, "https://example.com/image.jpg"),
+                TextNode(" for good measure.", TextType.TEXT),
+            ],
+            text_nodes
+        )
+
 if __name__ == "__main__":
     unittest.main()
