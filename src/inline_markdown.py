@@ -1,5 +1,14 @@
 import re
+from enum import Enum
 from textnode import TextNode, TextType
+
+class BlockType(Enum):
+    PARAGRAPH = "paragraph"
+    HEADING = "heading" 
+    CODE = "code"
+    QUOTE = "quote"
+    U_LIST = "u_list"
+    O_LIST = "o_list"
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -93,3 +102,12 @@ def markdown_to_blocks(markdown):
         if node == "":
             split_markdown.remove(node)
     return list(map(lambda node: node.strip(), split_markdown))
+
+def block_to_block_type(markdown_block):
+    if markdown_block.startswith(("#", "##", "###", "####", "#####", "######")):
+        text = markdown_block.lstrip("#")
+        if text[0] == " " and len(text) > 1:
+            return BlockType.HEADING
+    
+    if markdown_block.startswith("```") and markdown_block.endswith("```"):
+        return BlockType.CODE
