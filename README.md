@@ -1,6 +1,14 @@
 # Static Site Generator
 This is a tool to convert Markdown files to an HTML format, and present it as a static website
 
+The generator supports 8 types of markdown block:
+- Paragraph
+- Heading
+- Code
+- Quote
+- Unordered List
+- Ordered List
+
 Currently supported inline markdown:
 - Normal text
 - Bold
