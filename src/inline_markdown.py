@@ -111,3 +111,35 @@ def block_to_block_type(markdown_block):
     
     if markdown_block.startswith("```") and markdown_block.endswith("```"):
         return BlockType.CODE
+    
+    if markdown_block[0] == ">":
+        split_block = markdown_block.split("\n")
+        is_all_quotes = True
+        for node in split_block:
+            if node[0] == ">":
+                continue
+            is_all_quotes = False
+        if is_all_quotes:
+            return BlockType.QUOTE
+
+    if markdown_block.startswith("- "):
+        split_block = markdown_block.split("\n")
+        is_all_u_list = True
+        for node in split_block:
+            if node.startswith("- "):
+                continue
+            is_all_u_list = False
+        if is_all_u_list:
+            return BlockType.U_LIST
+        
+    if markdown_block.startswith("1."):
+        split_block = markdown_block.split("\n")
+        is_all_o_list = True
+        for node in split_block:
+            if node.startswith("- "):
+                continue
+            is_all_o_list = False
+        if is_all_o_list:
+            return BlockType.U_LIST
+    
+    return BlockType.PARAGRAPH

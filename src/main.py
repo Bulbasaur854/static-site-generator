@@ -5,7 +5,9 @@ from inline_markdown import *
 def main():
     markdowns = [
         "#### This is a heading",
-        "```this is some code```"
+        "```this is some code```",
+        "> This is quote\n> bla bla bla",
+        "- This is an unordered list\n- item\n- another item"
     ]
     for markdown in markdowns:
         print(block_to_block_type(markdown))
