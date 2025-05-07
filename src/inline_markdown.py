@@ -1,3 +1,12 @@
+# This file contains:
+# -------------------
+# `BlockType` enum
+# `split_nodes_image(old_nodes)`                            - given a list of strings, for each, split the string with images as delimiters 
+# `split_nodes_link(old_nodes)`                             - given a list of strings, for each, split the string with links as delimiters
+# `text_to_text_node(text)`                                 - convert the given string to a list of text nodes with the corresponding text type
+# `makrkdown_to_blocks(markdown)`                           - given markdown whole text as string, return a list of blocks (each one removes empty chars as well)
+# `block_to_block_type(markdown_block)`                     - given a amrkdown block string, return its block type
+
 import re
 from enum import Enum
 from textnode import TextNode, TextType

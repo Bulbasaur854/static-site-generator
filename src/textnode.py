@@ -1,3 +1,9 @@
+# This file contains:
+# -------------------
+# `TextType` enum
+# `TextNode` class 
+# `text_node_to_html_node(text_node)` - returns an HTML node according to given text
+
 from enum import Enum
 from htmlnode import LeafNode
 
