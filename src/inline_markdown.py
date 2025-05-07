@@ -1,11 +1,13 @@
 # This file contains:
 # -------------------
 # `BlockType` enum
-# `split_nodes_image(old_nodes)`            - given a list of strings, for each, split the string with images as delimiters 
-# `split_nodes_link(old_nodes)`             - given a list of strings, for each, split the string with links as delimiters
-# `text_to_text_node(text)`                 - convert the given string to a list of text nodes with the corresponding text type
-# `makrkdown_to_blocks(markdown)`           - given markdown whole text as string, return a list of blocks (each one removes empty chars as well)
-# `block_to_block_type(markdown_block)`     - given a amrkdown block string, return its block type
+# `split_nodes_delimiter(old_nodes, delimiter, text_type)`  - for each node in given list, return a list of nodes split according to thetext type of each
+# `split_nodes_image(old_nodes)`                            - given a list of strings, for each, split the string with images as delimiters 
+# `split_nodes_link(old_nodes)`                             - given a list of strings, for each, split the string with links as delimiters
+# `text_to_textnode(text)`                                  - convert the given string to a list of text nodes with the corresponding text type
+# `makrkdown_to_blocks(markdown)`                           - given markdown whole text as string, return a list of blocks (each one removes empty chars as well)
+# `block_to_block_type(markdown_block)`                     - given a amrkdown block string, return its block type
+# `markdown_to_html_node(markdown)`                         - given full markdown document, return an HTML parent node
 
 import re
 from enum import Enum
@@ -44,57 +46,11 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         
     return new_nodes
 
-def extract_markdown_images(text):
-    return re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
-
-def extract_markdown_links(text):
-    return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
-
 def split_nodes_image(old_nodes):
     return split_nodes_image_link(old_nodes, extract_markdown_images, TextType.IMAGE)
 
 def split_nodes_link(old_nodes):
     return split_nodes_image_link(old_nodes, extract_markdown_links, TextType.LINK)
-
-def split_nodes_image_link(old_nodes, extract_markdown_function, text_type):
-    new_nodes = []
-
-    for old_node in old_nodes:
-        if old_node.text_type != TextType.TEXT:
-            new_nodes.append(old_node)
-            continue
-
-        nodes_extracted = extract_markdown_function(old_node.text)
-
-        if not nodes_extracted:
-            new_nodes.append(old_node)
-            continue
-
-        current_text = old_node.text
-
-        for node in nodes_extracted:
-            text = node[0]
-            url = node[1]
-
-            if text_type == TextType.IMAGE:
-                sections = current_text.split(f"![{text}]({url})", 1)
-            elif text_type == TextType.LINK:
-                sections = current_text.split(f"[{text}]({url})", 1)
-
-            if sections[0]:
-                new_nodes.append(TextNode(sections[0], TextType.TEXT))
-            
-            new_nodes.append(TextNode(text, text_type, url))
-
-            if len(sections) > 1:
-                current_text = sections[1]
-            else:
-                current_text = ""
-        
-        if current_text:
-            new_nodes.append(TextNode(current_text, TextType.TEXT))
-
-    return new_nodes
 
 def text_to_textnode(text):
     new_nodes = split_nodes_delimiter([TextNode(text, TextType.TEXT)], "**", TextType.BOLD)
@@ -154,3 +110,58 @@ def block_to_block_type(markdown_block):
             return BlockType.O_LIST
     
     return BlockType.PARAGRAPH
+
+def markdown_to_html_node(markdown):
+    markdown_blocks = markdown_to_blocks(markdown)
+
+    for block in markdown_blocks:
+        block_type = block_to_block_type(block)
+        html_node = block_type_to_html_node(block_type)
+
+# Helper functions
+# ----------------
+def extract_markdown_images(text):
+    return re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+
+def extract_markdown_links(text):
+    return re.findall(r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+
+def split_nodes_image_link(old_nodes, extract_markdown_function, text_type):
+    new_nodes = []
+
+    for old_node in old_nodes:
+        if old_node.text_type != TextType.TEXT:
+            new_nodes.append(old_node)
+            continue
+
+        nodes_extracted = extract_markdown_function(old_node.text)
+
+        if not nodes_extracted:
+            new_nodes.append(old_node)
+            continue
+
+        current_text = old_node.text
+
+        for node in nodes_extracted:
+            text = node[0]
+            url = node[1]
+
+            if text_type == TextType.IMAGE:
+                sections = current_text.split(f"![{text}]({url})", 1)
+            elif text_type == TextType.LINK:
+                sections = current_text.split(f"[{text}]({url})", 1)
+
+            if sections[0]:
+                new_nodes.append(TextNode(sections[0], TextType.TEXT))
+            
+            new_nodes.append(TextNode(text, text_type, url))
+
+            if len(sections) > 1:
+                current_text = sections[1]
+            else:
+                current_text = ""
+        
+        if current_text:
+            new_nodes.append(TextNode(current_text, TextType.TEXT))
+
+    return new_nodes
