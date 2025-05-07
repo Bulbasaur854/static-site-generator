@@ -1,8 +1,8 @@
 # This file contains:
 # -------------------
 # `HTMLNode`, `LeafNode` & `ParentNode` classes
-#   `to_html()`       - returns the HTML node as an HTML string
-#   `props_to_html()` - returns the props value of the HTML node as string
+#   `to_html()`         - returns the HTML node as an HTML string
+#   `props_to_html()`   - returns the props value of the HTML node as string
 
 class HTMLNode:
     def __init__(self, tag=None, value=None, children=None, props=None):
