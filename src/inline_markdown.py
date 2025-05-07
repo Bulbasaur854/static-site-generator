@@ -132,14 +132,16 @@ def block_to_block_type(markdown_block):
         if is_all_u_list:
             return BlockType.U_LIST
         
-    if markdown_block.startswith("1."):
+    if markdown_block.startswith("1. "):
         split_block = markdown_block.split("\n")
         is_all_o_list = True
-        for node in split_block:
-            if node.startswith("- "):
+        i = 2
+        for node in split_block[1:]:
+            if node.startswith(f"{i}. "):
+                i += 1
                 continue
             is_all_o_list = False
         if is_all_o_list:
-            return BlockType.U_LIST
+            return BlockType.O_LIST
     
     return BlockType.PARAGRAPH

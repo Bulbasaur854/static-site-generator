@@ -335,5 +335,50 @@ class TestMarkdownToBlocks(unittest.TestCase):
             ],
         )
 
+class TestBlockToBlockType(unittest.TestCase):
+    def test_block_to_blocktype(self):
+        markdown_blocks = [
+            "#### This is a heading",
+            "```this is some code```",
+            "> This is quote\n> bla bla bla",
+            "- This is an unordered list\n- item\n- another item",
+            "1. This is a list\n2. item\n3. another item"
+        ]
+        # for block in markdown_blocks:
+        block_types = list(map(lambda block: block_to_block_type(block), markdown_blocks))
+        self.assertEqual(
+            [
+                BlockType.HEADING,
+                BlockType.CODE,
+                BlockType.QUOTE,
+                BlockType.U_LIST,
+                BlockType.O_LIST,
+            ]
+            ,
+            block_types
+        )
+
+    def test_block_to_blocktype_invalid(self):
+        markdown_blocks = [
+            "####/ This is a heading",
+            "``this is some code```",
+            "> This is quote\nbla bla bla",
+            "- This is an unordered list\n-item  \n- another item",
+            "1. This is a list\n4. item\n3. another item"
+        ]
+        # for block in markdown_blocks:
+        block_types = list(map(lambda block: block_to_block_type(block), markdown_blocks))
+        self.assertEqual(
+            [
+                BlockType.PARAGRAPH,
+                BlockType.PARAGRAPH,
+                BlockType.PARAGRAPH,
+                BlockType.PARAGRAPH,
+                BlockType.PARAGRAPH,
+            ]
+            ,
+            block_types
+        )
+
 if __name__ == "__main__":
     unittest.main()
