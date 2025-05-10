@@ -59,6 +59,9 @@ def markdown_to_blocks(markdown):
     return list(map(lambda node: node.strip(), split_markdown))
 
 def block_to_block_type(markdown_block):
+    if not markdown_block:
+        return
+    
     if markdown_block.startswith(("#", "##", "###", "####", "#####", "######")):
         text = markdown_block.lstrip("#")
         if text[0] == " " and len(text) > 1:
@@ -110,41 +113,33 @@ def markdown_to_html_node(block):
         
         match block_type:
             case BlockType.PARAGRAPH:
-                children = text_to_children(block)
+                children = text_to_children(" ".join(map(str.strip, block.split("\n"))))
                 block_nodes.append(ParentNode("p", children))
             case BlockType.HEADING:
                 h_lvl = len(block[:block.index(" ")])
                 children = text_to_children(block.lstrip("# "))
                 block_nodes.append(ParentNode(f"h{h_lvl}", children))
-            
-    
-    print(block_nodes)
-        # match block_type:
-        #     case BlockType.PARAGRAPH:
-        #         parent_node = ParentNode("p", [])
-        #         html_content = block
-        #     case BlockType.HEADING:
-        #         space_index = block.index(" ")
-        #         header_level = len(block[:space_index])
-        #         parent_node = ParentNode(f"h{header_level}", [])
-        #         html_content = block[space_index+1:]
-        #     case BlockType.CODE:
-        #         parent_node = ParentNode("code", [])
-        #         html_content = block[4:-3]
-        #     case BlockType.QUOTE:
-        #         parent_node = ParentNode("blockquote", [])
-        #         html_content = "".join(block.split("> "))
-        #     case BlockType.U_LIST:
-        #         parent_node = ParentNode("ul", block)
-        #         html_content = block
-        #     case BlockType.O_LIST:
-        #         parent_node = ParentNode("ol", block)
-        #         html_content = block        
-        
-        # if block_type != BlockType.CODE:
-        #     children = text_to_children(html_content)
-        # else:
-        #     children = [text_node_to_html_node(TextNode(html_content, TextType.CODE))]
+            case BlockType.CODE:
+                # text_node = TextNode(block.strip("`\n"), TextType.CODE)                
+                # block_nodes.append(ParentNode("pre", [text_node_to_html_node(text_node)]))
+                code_content = "\n".join(map(str.rstrip, block.strip("`\n").split("\n")))
+                text_node = TextNode(code_content, TextType.CODE)
+                block_nodes.append(ParentNode("pre", [text_node_to_html_node(text_node)]))
+            case BlockType.QUOTE:
+                children = text_to_children("".join(block.split("> ")))
+                block_nodes.append(ParentNode("blockquote", children))
+            case BlockType.U_LIST:
+                split_list = block.split("- ")[1:]
+                children = list(map(lambda item: ParentNode("li", text_to_children(item.strip())), split_list))
+                block_nodes.append(ParentNode("ul", children))
+            case BlockType.O_LIST:
+                split_list = block.split("\n")
+                children = list(map(lambda item: ParentNode("li", text_to_children(item[item.index(".") + 2:].strip())), split_list))
+                block_nodes.append(ParentNode("ol", children))
+
+    return ParentNode("div", block_nodes)
+    # for block in block_nodes:
+    #     print(f"{block.to_html()}\n----------")
 
 # Helper functions
 # ----------------
