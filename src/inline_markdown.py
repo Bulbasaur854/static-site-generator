@@ -120,10 +120,8 @@ def markdown_to_html_node(block):
                 children = text_to_children(block.lstrip("# "))
                 block_nodes.append(ParentNode(f"h{h_lvl}", children))
             case BlockType.CODE:
-                # text_node = TextNode(block.strip("`\n"), TextType.CODE)                
-                # block_nodes.append(ParentNode("pre", [text_node_to_html_node(text_node)]))
-                code_content = "\n".join(map(str.rstrip, block.strip("`\n").split("\n")))
-                text_node = TextNode(code_content, TextType.CODE)
+                strip_block = block.lstrip("` \n").rstrip("`")
+                text_node = TextNode(strip_block, TextType.CODE)                
                 block_nodes.append(ParentNode("pre", [text_node_to_html_node(text_node)]))
             case BlockType.QUOTE:
                 children = text_to_children("".join(block.split("> ")))
