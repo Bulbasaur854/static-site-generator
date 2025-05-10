@@ -1,17 +1,7 @@
-# This file contains:
-# -------------------
-# `BlockType` enum
-# `split_nodes_delimiter(old_nodes, delimiter, text_type)`  - for each node in given list, return a list of nodes split according to thetext type of each
-# `split_nodes_image(old_nodes)`                            - given a list of strings, for each, split the string with images as delimiters 
-# `split_nodes_link(old_nodes)`                             - given a list of strings, for each, split the string with links as delimiters
-# `text_to_textnode(text)`                                  - convert the given string to a list of text nodes with the corresponding text type
-# `makrkdown_to_blocks(markdown)`                           - given markdown whole text as string, return a list of blocks (each one removes empty chars as well)
-# `block_to_block_type(markdown_block)`                     - given a amrkdown block string, return its block type
-# `markdown_to_html_node(markdown)`                         - given full markdown document, return an HTML parent node
-
 import re
 from enum import Enum
-from textnode import TextNode, TextType
+from textnode import *
+from htmlnode import *
 
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
@@ -111,12 +101,50 @@ def block_to_block_type(markdown_block):
     
     return BlockType.PARAGRAPH
 
-def markdown_to_html_node(markdown):
-    markdown_blocks = markdown_to_blocks(markdown)
+def markdown_to_html_node(block):
+    markdown_blocks = markdown_to_blocks(block)
+    block_nodes = []
 
     for block in markdown_blocks:
         block_type = block_to_block_type(block)
-        html_node = block_type_to_html_node(block_type)
+        
+        match block_type:
+            case BlockType.PARAGRAPH:
+                children = text_to_children(block)
+                block_nodes.append(ParentNode("p", children))
+            case BlockType.HEADING:
+                h_lvl = len(block[:block.index(" ")])
+                children = text_to_children(block.lstrip("# "))
+                block_nodes.append(ParentNode(f"h{h_lvl}", children))
+            
+    
+    print(block_nodes)
+        # match block_type:
+        #     case BlockType.PARAGRAPH:
+        #         parent_node = ParentNode("p", [])
+        #         html_content = block
+        #     case BlockType.HEADING:
+        #         space_index = block.index(" ")
+        #         header_level = len(block[:space_index])
+        #         parent_node = ParentNode(f"h{header_level}", [])
+        #         html_content = block[space_index+1:]
+        #     case BlockType.CODE:
+        #         parent_node = ParentNode("code", [])
+        #         html_content = block[4:-3]
+        #     case BlockType.QUOTE:
+        #         parent_node = ParentNode("blockquote", [])
+        #         html_content = "".join(block.split("> "))
+        #     case BlockType.U_LIST:
+        #         parent_node = ParentNode("ul", block)
+        #         html_content = block
+        #     case BlockType.O_LIST:
+        #         parent_node = ParentNode("ol", block)
+        #         html_content = block        
+        
+        # if block_type != BlockType.CODE:
+        #     children = text_to_children(html_content)
+        # else:
+        #     children = [text_node_to_html_node(TextNode(html_content, TextType.CODE))]
 
 # Helper functions
 # ----------------
@@ -165,3 +193,6 @@ def split_nodes_image_link(old_nodes, extract_markdown_function, text_type):
             new_nodes.append(TextNode(current_text, TextType.TEXT))
 
     return new_nodes
+
+def text_to_children(text):
+    return list(map(lambda node: text_node_to_html_node(node), text_to_textnode(text)))
