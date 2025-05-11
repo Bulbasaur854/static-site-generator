@@ -1,33 +1,16 @@
 import os, shutil
-from htmlnode import *
-from textnode import *
-from inline_markdown import *
+from copy_static import *
+
+dir_path_static = "./static"
+dir_path_public = "./public"
 
 def main():
-    copy_static_to_public()
-
-def copy_static_to_public():
     # delete contents of `public` folder if it exists
-    if os.path.exists("public"):
-        shutil.rmtree("public")
-    os.mkdir("public")
+    if os.path.exists(dir_path_public):
+        shutil.rmtree(dir_path_public)
+    os.mkdir(dir_path_public)
 
-    copy_files("static", "public")
-
-def copy_files(src_path, dst_path):
-    if (os.path.isfile(src_path)):
-        shutil.copy(src_path, dst_path) 
-        print(f"copied: {src_path} --> {dst_path}")
-    else:
-        # if source is a directory, make sure it exists in destination
-        if not os.path.exists(dst_path):
-            os.mkdir(dst_path) 
-
-        # process all items in the directory
-        for item in os.listdir(src_path):
-            source_item = os.path.join(src_path, item)
-            dest_item = os.path.join(dst_path, item)
-            copy_files(source_item, dest_item)
+    copy_files(dir_path_static, dir_path_public)
 
 if __name__=="__main__":
     main()
