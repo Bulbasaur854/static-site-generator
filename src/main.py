@@ -11,11 +11,13 @@ def main():
         shutil.rmtree(dir_path_public)
     os.mkdir(dir_path_public)
 
-    copy_files(dir_path_static, dir_path_public)
+    copy_files_recursive(dir_path_static, dir_path_public)
 
     generate_page("content/index.md", "template.html", "public/index.html")
 
-def copy_files(src_path, dst_path):
+# Helper functions
+# ----------------
+def copy_files_recursive(src_path, dst_path):
     if (os.path.isfile(src_path)):
         shutil.copy(src_path, dst_path) 
         print(f"copied: {src_path} --> {dst_path}")
@@ -28,7 +30,7 @@ def copy_files(src_path, dst_path):
         for item in os.listdir(src_path):
             source_item = os.path.join(src_path, item)
             dest_item = os.path.join(dst_path, item)
-            copy_files(source_item, dest_item)
+            copy_files_recursive(source_item, dest_item)
 
 def extract_title(markdown):
     markdown_blocks = markdown_to_blocks(markdown)
