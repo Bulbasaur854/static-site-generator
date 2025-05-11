@@ -17,7 +17,7 @@ def copy_static_to_public():
 def copy_files(src_path, dst_path):
     if (os.path.isfile(src_path)):
         shutil.copy(src_path, dst_path) 
-        print(f"Copied: {src_path} to {dst_path}")
+        print(f"copied: {src_path} --> {dst_path}")
     else:
         # if source is a directory, make sure it exists in destination
         if not os.path.exists(dst_path):
