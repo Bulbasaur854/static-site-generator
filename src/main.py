@@ -3,30 +3,14 @@ from textnode import *
 from inline_markdown import *
 
 def main():
-    md = """
-This is **bolded** paragraph text in a p tag here
+    # with open("src/test.txt", "r") as file:
+    #     md = file.read()
 
-## h2 header
-
-```
-This is my code...
-Bla bla bla
-```
-
-> This is my quote:
-> "I love bananas"
-> Thank you
-
-- banana
-- apple
-- cherry
-
-1. first item
-2. second item
-3. third item
-"""
-
-    markdown_to_html_node(md)
+    # for node in markdown_to_html_node(md).children:
+    #     print(f"{node}\n----------")
+    # html_node = markdown_to_html_node(md)
+    # print(html_node.to_html())
+    pass
 
 if __name__=="__main__":
     main()
