@@ -84,7 +84,7 @@ def markdown_to_html_node(block):
                 text_node = TextNode(strip_block, TextType.CODE)                
                 block_nodes.append(ParentNode("pre", [text_node_to_html_node(text_node)]))
             case BlockType.QUOTE:
-                children = text_to_children("".join(block.split("> ")))
+                children = text_to_children("".join(block.split(">")).strip())
                 block_nodes.append(ParentNode("blockquote", children))
             case BlockType.U_LIST:
                 split_list = block.split("- ")[1:]

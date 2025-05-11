@@ -1,5 +1,6 @@
 import os, shutil
 from markdown_blocks import *
+from markdown_blocks import *
 
 dir_path_static = "./static"
 dir_path_public = "./public"
@@ -10,10 +11,9 @@ def main():
         shutil.rmtree(dir_path_public)
     os.mkdir(dir_path_public)
 
-    # copy_files(dir_path_static, dir_path_public)
+    copy_files(dir_path_static, dir_path_public)
 
-    title = extract_title("# Hello")
-    print(title)
+    generate_page("content/index.md", "template.html", "public/index.html")
 
 def copy_files(src_path, dst_path):
     if (os.path.isfile(src_path)):
@@ -39,6 +39,24 @@ def extract_title(markdown):
                 return block[2:].strip()
             
     raise Exception("invalid markdown input file: no `h1` block was found, could not generate title!")
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+
+    with open(from_path, "r") as file:
+        markdown_content = file.read()
+    with open(template_path, "r") as file:
+        template_content = file.read()
+
+    new_content = markdown_to_html_node(markdown_content).to_html()
+    new_title = extract_title(markdown_content)
+
+    template_content = template_content.replace("{{ Title }}", new_title)
+    template_content = template_content.replace("{{ Content }}", new_content)
+
+    # os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+    with open(dest_path, "w") as file:
+        file.write(template_content)
 
 if __name__=="__main__":
     main()
