@@ -136,8 +136,6 @@ def markdown_to_html_node(block):
                 block_nodes.append(ParentNode("ol", children))
 
     return ParentNode("div", block_nodes)
-    # for block in block_nodes:
-    #     print(f"{block.to_html()}\n----------")
 
 # Helper functions
 # ----------------
