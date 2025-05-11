@@ -1,16 +1,15 @@
+import os
 from htmlnode import *
 from textnode import *
 from inline_markdown import *
 
 def main():
-    # with open("src/test.txt", "r") as file:
-    #     md = file.read()
+    copy_static_to_public()
 
-    # for node in markdown_to_html_node(md).children:
-    #     print(f"{node}\n----------")
-    # html_node = markdown_to_html_node(md)
-    # print(html_node.to_html())
-    pass
+def copy_static_to_public(path):
+    # print(os.listdir("static"))
+    if os.path.isfile(path):
+        
 
 if __name__=="__main__":
     main()
