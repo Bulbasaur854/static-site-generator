@@ -4,19 +4,24 @@ from markdown_blocks import *
 
 dir_path_static = "./static"
 dir_path_public = "./public"
+dir_path_content = "./content"
+dir_path_template = "./template.html"
 
 def main():
-    # delete contents of `public` folder if it exists
+    # make sure `public` folder is empty and exists
     if os.path.exists(dir_path_public):
         shutil.rmtree(dir_path_public)
     os.mkdir(dir_path_public)
 
+    # copy files from `static` folder to `public`
     copy_files_recursive(dir_path_static, dir_path_public)
 
-    generate_pages_recursive("content", "template.html", "public")
+    # generate html pages to `public` for every markdown file in `content`
+    generate_pages_recursive(dir_path_content, dir_path_template, dir_path_public)
 
 # Helper functions
 # ----------------
+
 def copy_files_recursive(src_path, dst_path):
     if os.path.isfile(src_path):
         shutil.copy(src_path, dst_path) 
