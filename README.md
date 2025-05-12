@@ -1,7 +1,8 @@
-# Static Site Generator
-This is a tool to convert Markdown files to an HTML format, and present it as a static website
+# 📝 Static Site Generator
 
-The generator supports 8 types of markdown block:
+A lightweight Python-based static site generator that converts Markdown files into styled HTML pages. It uses a modular architecture to parse, structure, and render content using customizable templates.
+
+The generator supports 8 types of markdown blocks:
 - Paragraph
 - Heading
 - Code
@@ -16,9 +17,7 @@ Currently supported inline markdown:
 - Links
 - Images
 
-## Note
-
-Markdown parsers often support nested inline elements. For example, you can have a bold word inside of italics:
+⚠️ Markdown parsers often support nested inline elements. For example, you can have a bold word inside of italics:
 ```markdown
 This is an _italic and **bold** word_.
 ```
