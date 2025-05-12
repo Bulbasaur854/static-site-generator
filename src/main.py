@@ -13,14 +13,14 @@ def main():
 
     copy_files_recursive(dir_path_static, dir_path_public)
 
-    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_pages_recursive("content", "template.html", "public")
 
 # Helper functions
 # ----------------
 def copy_files_recursive(src_path, dst_path):
-    if (os.path.isfile(src_path)):
+    if os.path.isfile(src_path):
         shutil.copy(src_path, dst_path) 
-        print(f"copied: {src_path} --> {dst_path}")
+        print(f"Copied: {src_path} --> {dst_path}")
     else:
         # if source is a directory, make sure it exists in destination
         if not os.path.exists(dst_path):
@@ -56,9 +56,21 @@ def generate_page(from_path, template_path, dest_path):
     template_content = template_content.replace("{{ Title }}", new_title)
     template_content = template_content.replace("{{ Content }}", new_content)
 
-    # os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+    os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     with open(dest_path, "w") as file:
         file.write(template_content)
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):    
+    if os.path.isfile(dir_path_content):
+        generate_page(dir_path_content, template_path, dest_dir_path.replace(".md", ".html"))
+    else:
+        if not os.path.exists(dest_dir_path):
+            os.makedirs(dest_dir_path, exist_ok=True)
+
+        for item in os.listdir(dir_path_content):
+            new_source = os.path.join(dir_path_content, item)
+            new_dest = os.path.join(dest_dir_path, item)
+            generate_pages_recursive(new_source, template_path, new_dest)
 
 if __name__=="__main__":
     main()
