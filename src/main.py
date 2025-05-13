@@ -11,7 +11,7 @@ def main():
     if len(sys.argv) > 1:
         basepath = sys.argv[1]
     else:
-        basepath = "/"
+        basepath = "./"
 
     # make sure `public` folder is empty and exists
     if os.path.exists(dir_path_public):
