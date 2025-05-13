@@ -1,6 +1,8 @@
 # 🌐 Static Site Generator
 
-A lightweight Python-based static site generator that converts Markdown files into styled HTML pages. It uses a modular architecture to parse, structure, and render content using customizable templates. [Live demo](https://bulbasaur854.github.io/static-site-generator/)
+A lightweight Python-based static site generator that converts Markdown files into styled HTML pages. It uses a modular architecture to parse, structure, and render content using customizable templates.
+
+[Live demo](https://bulbasaur854.github.io/static-site-generator/)
 
 The generator supports 8 types of markdown blocks:
 - Paragraph
