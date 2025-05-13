@@ -26,16 +26,14 @@ And inline markdown:
 - Links
 - Images
 
-## 🧩 User Guide
-
-### Prerequisites
+## 🛍️ Prerequisites
 - Python 3.7+
 - A Unix-like terminal (macOS, Linux, or WSL for Windows)
 - Bash shell (used to run scripts)
 
-### Getting Started
+## 🛠️ Building The Website
 1. Download and extract the latest release zip file [here](https://github.com/Bulbasaur854/static-site-generator/releases)
-2. Add your markdown content inside the `content` folder, for example:
+2. Add your markdown files to the `content` folder, for example:
    
    ```bash
     content/
@@ -62,3 +60,9 @@ And inline markdown:
     open docs/index.html      # macOS
     xdg-open docs/index.html  # Linux
    ```
+
+## ⛵ Deploying to GitHub Pages
+1. Commit the generated `docs/` folder
+2. Go to your GitHub repo settings
+3. Under **Pages**, set the source to `docs/` on the main branch
+4. Your site will be live at `https://your-username.github.io/your-repo-name`
