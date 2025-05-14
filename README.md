@@ -33,20 +33,7 @@ A lightweight Python-based static site generator that converts Markdown files in
 
 ## 🛠️ Building The Website
 1. Download and extract the latest release zip file [here](https://github.com/Bulbasaur854/static-site-generator/releases)
-2. Add your markdown files to the `content` folder, for example:
-   
-   ```bash
-    content/
-    ├── index.md
-    ├── contact/
-    │   └── index.md
-    └── blog/
-        ├── glorfindel/
-        │   └── index.md
-        └── majesty/
-            └── index.md
-   ```
-
+2. Add your markdown files to the `content` folder
 3. Build the website files by running this command in bash terminal
 
    ```bash
